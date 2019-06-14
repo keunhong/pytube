@@ -38,7 +38,9 @@ def apply_signature(config_args, fmt, js):
         elif live_stream:
             raise LiveStreamError('Video is currently being streamed live')
 
-        if 'signature=' in url:
+        if ('signature=' in url or 
+                ('s' not in stream and 
+                 ('&sig=' in url or '&lsig=' in url))):
             # For certain videos, YouTube will just provide them pre-signed, in
             # which case there's no real magic to download them and we can skip
             # the whole signature descrambling entirely.
@@ -61,7 +63,7 @@ def apply_signature(config_args, fmt, js):
                 }, indent=2,
             ),
         )
-        stream_manifest[i]['url'] = url + '&signature=' + signature
+        stream_manifest[i]['url'] = url + '&sig=' + signature
 
 
 def apply_descrambler(stream_data, key):
